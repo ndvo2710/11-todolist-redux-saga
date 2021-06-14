@@ -33,6 +33,13 @@ export class TodoListService {
             method: 'PUT',
         })
     }
+
+    rejectTaskApi = (taskName) => {
+        return Axios({
+            url: `${DOMAIN}/ToDoList/rejectTask?taskName=${taskName}`,
+            method: 'PUT',
+        })
+    }
 }
 
 export const todoListService = new TodoListService();

@@ -2,7 +2,7 @@ import { call, delay, put, takeLatest } from "@redux-saga/core/effects";
 import { todoListService } from "../../services/ToDoListService";
 import { STATUS_CODE } from "../../util/constants/settingSystem";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../constants/LoadingConst";
-import { ADD_TASK_API, CHECK_TASK_API, DELETE_TASK_API, GET_TASKLIST_API, SET_TASK_API } from "../constants/ToDoListConst";
+import { ADD_TASK_API, CHECK_TASK_API, DELETE_TASK_API, GET_TASKLIST_API, REJECT_TASK_API, SET_TASK_API } from "../constants/ToDoListConst";
 
 
 
@@ -10,7 +10,7 @@ function* getTaskApiAction(action) {
     yield put({ type: DISPLAY_LOADING });
     try {
         const {data, status} = yield call(() => { return todoListService.getTaskApi() });
-        yield delay(300);
+        yield delay(100);
         if (status === STATUS_CODE.SUCCESS) {
             yield put({
                 type: SET_TASK_API,
@@ -84,13 +84,33 @@ function* trackingActionDoneTaskApi() {
 }
 
 
+function* rejectTaskApiAction(action) {
+    const {taskName} = action;
+    // Call API
+    try {
+        const {_, status} = yield call(() => { return todoListService.rejectTaskApi(taskName) });
+        if (status === STATUS_CODE.SUCCESS) {
+            yield put({ type: GET_TASKLIST_API });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function* trackingActionRejectTaskApi() {
+    yield takeLatest(REJECT_TASK_API, rejectTaskApiAction)
+}
+
+
+
 
 
 const todoListSagaActionTrackingList = [
     trackingActionGetTaskApi(),
     trackingActionAddTaskApi(),
     trackingActionDelTaskApi(),
-    trackingActionDoneTaskApi()
+    trackingActionDoneTaskApi(),
+    trackingActionRejectTaskApi(),
 ]
 
 export default todoListSagaActionTrackingList
