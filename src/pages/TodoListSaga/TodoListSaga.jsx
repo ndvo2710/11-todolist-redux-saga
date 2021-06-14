@@ -1,10 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.css';
 import bg from './bg.png';
+import { useSelector } from 'react-redux';
+
 
 export default function TodoListSaga() {
-    const handleChange = () => {
+    const {taskList} = useSelector(state => state.TodoListReducer)
+    console.log(taskList);
 
+    const [localState, setlocalState] = useState({
+        taskList: [],
+        values: {
+            taskName: ''
+        },
+        errors: {
+            taskName: ''
+        }
+    })
+    
+    const handleChange = (e) => {
+        const { value, name } = e.target ;
+        let newValues = {...localState.values};
+        newValues = {...newValues, [name]: value };
+        let newErrors = {...localState.errors}; 
+        let regexString = /^[a-z A-Z]+$/;
+
+        if (!regexString.test(value) || value.trim() === '') {
+            newErrors[name] = name + ' invalid !';
+        } else {
+            newErrors[name] = '';
+        }
+
+        setlocalState({
+            ...localState,
+            values: newValues,
+            errors: newErrors
+        })
     }
 
     const addTask = () => {
@@ -12,7 +43,7 @@ export default function TodoListSaga() {
     }
 
     const renderTaskToDo = () => {
-        
+
     }
 
     const renderTaskToDoDone = () => {
