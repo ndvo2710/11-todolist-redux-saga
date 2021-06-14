@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './TodoList.css';
 import bg from './bg.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
+import { ADD_TASK_API, GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
 
 
 export default function TodoListSaga() {
@@ -57,8 +57,12 @@ export default function TodoListSaga() {
 
 
 
-    const addTask = () => {
-        
+    const addTask = (e) => {
+        e.preventDefault();
+        dispatch({
+            type: ADD_TASK_API,
+            taskName: localState.values.taskName
+        })
     }
 
     const renderTaskToDo = () => {
@@ -104,7 +108,7 @@ export default function TodoListSaga() {
             <div className="card__header">
                 <img src={bg} alt='bg.png' />
             </div>
-            <form className="card__body">
+            <form className="card__body" onSubmit={addTask}>
                 <div className="card__content">
                     <div className="card__title">
                         <h2>My Tasks</h2>

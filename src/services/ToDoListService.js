@@ -9,6 +9,16 @@ export class TodoListService {
             method: 'GET'
         })
     }
+
+    addTaskApi = (taskName) => {
+        return Axios({
+            url: `${DOMAIN}/ToDoList/addTask`,
+            method: 'POST',
+            data: {
+                taskName
+            }
+        })
+    }
 }
 
 export const todoListService = new TodoListService();
