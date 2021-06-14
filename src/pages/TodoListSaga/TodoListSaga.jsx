@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './TodoList.css';
 import bg from './bg.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { ADD_TASK_API, GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
+import { ADD_TASK_API, DELETE_TASK_API, GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
 
 
 export default function TodoListSaga() {
     const dispatch = useDispatch();
-    const {taskList} = useSelector(state => state.TodoListReducer)
+    const { taskList } = useSelector(state => state.TodoListReducer)
     console.log(taskList);
 
     const [localState, setlocalState] = useState({
@@ -19,12 +19,12 @@ export default function TodoListSaga() {
             taskName: ''
         }
     })
-    
+
     const handleChange = (e) => {
-        const { value, name } = e.target ;
-        let newValues = {...localState.values};
-        newValues = {...newValues, [name]: value };
-        let newErrors = {...localState.errors}; 
+        const { value, name } = e.target;
+        let newValues = { ...localState.values };
+        newValues = { ...newValues, [name]: value };
+        let newErrors = { ...localState.errors };
         let regexString = /^[a-z A-Z]+$/;
 
         if (!regexString.test(value) || value.trim() === '') {
@@ -52,7 +52,7 @@ export default function TodoListSaga() {
         return () => {
 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -65,12 +65,20 @@ export default function TodoListSaga() {
         })
     }
 
+    const delTask = (taskName) => {
+        dispatch({
+            type: DELETE_TASK_API,
+            taskName: taskName
+        })
+    }
+
     const renderTaskToDo = () => {
         return taskList.filter(item => !item.status).map((item, index) => {
             return <li key={index}>
                 <span>{item.taskName}</span>
                 <div className="buttons">
                     <button className="remove" type="button" onClick={() => {
+                        delTask(item.taskName)
                     }}>
                         <i className="fa fa-trash-alt" />
                     </button>
@@ -90,6 +98,7 @@ export default function TodoListSaga() {
                 <span>{item.taskName}</span>
                 <div className="buttons">
                     <button className="remove" type="button" onClick={() => {
+                        delTask(item.taskName)
                     }}>
                         <i className="fa fa-trash-alt" />
                     </button>
