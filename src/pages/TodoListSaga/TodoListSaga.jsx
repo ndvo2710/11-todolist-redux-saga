@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './TodoList.css';
 import bg from './bg.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { ADD_TASK_API, DELETE_TASK_API, GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
+import { ADD_TASK_API, CHECK_TASK_API, DELETE_TASK_API, GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
 
 
 export default function TodoListSaga() {
@@ -72,6 +72,13 @@ export default function TodoListSaga() {
         })
     }
 
+    const doneTask = (taskName) => {
+        dispatch({
+            type: CHECK_TASK_API,
+            taskName: taskName
+        })
+    }
+
     const renderTaskToDo = () => {
         return taskList.filter(item => !item.status).map((item, index) => {
             return <li key={index}>
@@ -83,6 +90,7 @@ export default function TodoListSaga() {
                         <i className="fa fa-trash-alt" />
                     </button>
                     <button type="button" className="complete" onClick={() => {
+                        doneTask(item.taskName)                        
                     }}>
                         <i className="far fa-check-circle" />
                         <i className="fas fa-check-circle" />
@@ -103,6 +111,7 @@ export default function TodoListSaga() {
                         <i className="fa fa-trash-alt" />
                     </button>
                     <button type="button" className="complete" onClick={() => {
+                        doneTask(item.taskName)
                     }}>
                         <i className="far fa-undo" />
                         <i className="fas fa-undo" />

@@ -26,6 +26,13 @@ export class TodoListService {
             method: 'DELETE',
         })
     }
+
+    markTaskDoneApi = (taskName) => {
+        return Axios({
+            url: `${DOMAIN}/ToDoList/doneTask?taskName=${taskName}`,
+            method: 'PUT',
+        })
+    }
 }
 
 export const todoListService = new TodoListService();
