@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './TodoList.css';
 import bg from './bg.png';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_TASKLIST_API } from '../../redux/constants/ToDoListConst';
 
 
 export default function TodoListSaga() {
+    const dispatch = useDispatch();
     const {taskList} = useSelector(state => state.TodoListReducer)
     console.log(taskList);
 
@@ -38,16 +40,63 @@ export default function TodoListSaga() {
         })
     }
 
+    const getTaskList = () => {
+        // Dispatch action saga
+        dispatch({
+            type: GET_TASKLIST_API
+        })
+    }
+
+    useEffect(() => {
+        getTaskList();
+        return () => {
+
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+
+
     const addTask = () => {
         
     }
 
     const renderTaskToDo = () => {
-
+        return taskList.filter(item => !item.status).map((item, index) => {
+            return <li key={index}>
+                <span>{item.taskName}</span>
+                <div className="buttons">
+                    <button className="remove" type="button" onClick={() => {
+                    }}>
+                        <i className="fa fa-trash-alt" />
+                    </button>
+                    <button type="button" className="complete" onClick={() => {
+                    }}>
+                        <i className="far fa-check-circle" />
+                        <i className="fas fa-check-circle" />
+                    </button>
+                </div>
+            </li>
+        })
     }
 
     const renderTaskToDoDone = () => {
-        
+        return taskList.filter(item => item.status).map((item, index) => {
+            return <li key={index}>
+                <span>{item.taskName}</span>
+                <div className="buttons">
+                    <button className="remove" type="button" onClick={() => {
+                    }}>
+                        <i className="fa fa-trash-alt" />
+                    </button>
+                    <button type="button" className="complete" onClick={() => {
+                    }}>
+                        <i className="far fa-undo" />
+                        <i className="fas fa-undo" />
+                    </button>
+                </div>
+            </li>
+        })
     }
 
     return (
