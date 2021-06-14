@@ -1,5 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import TodoListReducer from './reducers/TodoListReducer';
+import LoadingReducer from './reducers/LoadingReducer';
 
 // middleware saga
 import createMiddleWareSaga from 'redux-saga';
@@ -8,7 +9,8 @@ const middleWareSaga = createMiddleWareSaga();
 
 
 const rootReducer = combineReducers({
-    TodoListReducer
+    TodoListReducer,
+    LoadingReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(middleWareSaga));
